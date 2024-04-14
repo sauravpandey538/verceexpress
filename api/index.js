@@ -62,7 +62,20 @@ connectDB()
 
 app.get("/",(req,res)=>{
 res.json({status:"Working"})
-})
+app.get('/api//users',  async(req,res)=>{
+
+    const user_list = await User.aggregate([
+      {$project:{
+        _id:1,
+        username:1,
+        avatar:1,
+        createdAt:1,
+        status:1
+      }}
+    ]);
+    res.status(201).json({user_list})
+    })})
+
 
 
 app.post("/signup",async(req,res)=>{
