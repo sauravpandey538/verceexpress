@@ -9,22 +9,21 @@
 
 
 const express = require("express");
-const DB = require("./DB/db");
-const connectDB = require("./DB/db");
 const app = express();
 const port = 3000;
-const User = require("./model/user.model")
-const Follow = require("./model/follow.model")
-const Comment = require('./model/comment.model')
-const Message = require('./model/message.model')
-const Post = require("./model/Post.model")
-const Like = require("./model/like.model")
+const DB = require("../DB/db");
+const connectDB = require("../DB/db");
+
+const User = require("../model/user.model")
+const Follow = require("../model/follow.model")
+const Comment = require('../model/comment.model')
+const Post = require("../model/Post.model")
+const Like = require("../model/like.model")
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const upload = require("./Middleware/multer.authencation.js")
-const uploadCloudinary = require("./utilities/cloudinary")
-const verifyJWT = require("./Middleware/jwt.authencation");
-const userPost = require("./model/uploadPost.model")
+const upload = require("../Middleware/multer.authencation.js")
+const uploadCloudinary = require("../utilities/cloudinary")
+const verifyJWT = require("../Middleware/jwt.authencation");
 const mongoose = require("mongoose")
 
 
@@ -504,50 +503,7 @@ app.post('/:postId/unlike', verifyJWT, async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 });
-app.post('/chats/send', verifyJWT, async (req, res) => {
-  try {
-    const { senderUsername, receiverUsername, message } = req.body;
-    
-    // Assuming you have a User model defined
-    const sender = await User.findOne({ username: senderUsername });
-    const receiver = await User.findOne({ username: receiverUsername });
 
-    if (!sender || !receiver) {
-      return res.status(404).json({ error: 'Sender or receiver not found' });
-    }
-
-    const chat = new Chat({ sender: sender._id, receiver: receiver._id, message });
-    await chat.save();
-    res.status(201).json(chat);
-  } catch (error) {
-    console.error('Error sending message:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-app.get('/chats/:senderUsername/:receiverUsername', verifyJWT, async (req, res) => {
-  try {
-    const { senderUsername, receiverUsername } = req.params;
-    
-    // Assuming you have a User model defined
-    const sender = await User.findOne({ username: senderUsername });
-    const receiver = await User.findOne({ username: receiverUsername });
-
-    if (!sender || !receiver) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    const chats = await Chat.find({
-      $or: [
-        { sender: sender._id, receiver: receiver._id },
-        { sender: receiver._id, receiver: sender._id }
-      ]
-    }).sort({ timestamp: 1 });
-    res.json(chats);
-  } catch (error) {
-    console.error('Error fetching messages:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
 
 app.get('/users', verifyJWT, async(req,res)=>{
 
