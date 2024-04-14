@@ -62,6 +62,9 @@ connectDB()
 
 app.get("/",(req,res)=>{
 res.json({status:"Working"})
+
+})
+
 app.get('/api//users',  async(req,res)=>{
 
     const user_list = await User.aggregate([
@@ -74,7 +77,7 @@ app.get('/api//users',  async(req,res)=>{
       }}
     ]);
     res.status(201).json({user_list})
-    })})
+    })
 
 
 
