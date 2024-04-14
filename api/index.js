@@ -29,7 +29,7 @@ const mongoose = require("mongoose")
 
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: 'https://verceexpress.vercel.app',
   credentials: true
 }));
 
