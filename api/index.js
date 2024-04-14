@@ -61,7 +61,7 @@ connectDB()
 
 
 app.get("/",(req,res)=>{
-res.send.json({status:"Working"})
+res.json({status:"Working"})
 })
 
 
