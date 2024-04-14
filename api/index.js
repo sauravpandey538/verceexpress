@@ -505,7 +505,7 @@ app.post('/:postId/unlike', verifyJWT, async (req, res) => {
 });
 
 
-app.get('/users', verifyJWT, async(req,res)=>{
+app.get('/users',  async(req,res)=>{
 
 const user_list = await User.aggregate([
   {$project:{
