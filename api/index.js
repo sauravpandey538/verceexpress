@@ -65,6 +65,12 @@ res.json({status:"Working"})
 
 })
 
+
+app.get("/hello",(req,res)=>{
+    res.json({status:"Hello"})
+    
+    })
+
 app.get('/api/users',  async(req,res)=>{
 
     const user_list = await User.aggregate([
