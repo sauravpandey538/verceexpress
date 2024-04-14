@@ -65,7 +65,7 @@ res.json({status:"Working"})
 
 })
 
-app.get('/api//users',  async(req,res)=>{
+app.get('/api/users',  async(req,res)=>{
 
     const user_list = await User.aggregate([
       {$project:{
