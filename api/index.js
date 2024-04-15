@@ -1,11 +1,4 @@
-// const express = require("express");
-// const app = express();
 
-// app.get("/", (req, res) => res.send("Express on Verce is working haha"));
-
-// app.listen(3000, () => console.log("Server ready on port 3000."));
-
-// module.exports = app;
 
 
 const express = require("express");
@@ -42,7 +35,6 @@ app.use(cors({
 
 
 app.get('/favicon.ico', (req, res) => res.status(204));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -147,7 +139,7 @@ app.post("/login", async (req, res) => {
         console.error("Error during login:", error);
         res.status(500).json({ error: "Internal server error" });
       }
-    }); 
+    });   // working
 app.post("/logout", verifyJWT,(req,res)=>{
      try {
        res.clearCookie('accessToken');
@@ -157,7 +149,7 @@ app.post("/logout", verifyJWT,(req,res)=>{
      } catch (error) {
       return res.json({message:"oi psyco login gar nah paila"})
      }
-    })
+    })    // working
 app.post("/uploadProfilePicture", verifyJWT, upload.single('file'),async (req,res) => {
       try {
         const user = await User.findById(req.user._id);
@@ -221,7 +213,7 @@ return res.json({message:"Sucessfully bioData was uploaded",user})
 
 
 
-});
+});     // Working
 app.get("/user", verifyJWT,async(req,res)=>{
   try {
     if (!req.user?._id) {
@@ -236,7 +228,7 @@ app.get("/user", verifyJWT,async(req,res)=>{
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
-})
+})     // Working
 app.post("/uploadPost", upload.single('image'), verifyJWT, async (req, res) => {
   try {
     // Find the authenticated user
@@ -274,7 +266,7 @@ app.post("/uploadPost", upload.single('image'), verifyJWT, async (req, res) => {
     });
   } catch (error) {
     console.error('Error uploading post:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error',error });
   }
 });
 app.delete('/posts/:postId', verifyJWT, async (req, res) => {
@@ -310,7 +302,7 @@ app.delete('/posts/:postId', verifyJWT, async (req, res) => {
     console.error('Error deleting post:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
-});
+});    
 app.get('/posts', async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1; // Get the page number from query parameters, default to 1
@@ -352,8 +344,7 @@ app.get('/posts', async (req, res) => {
     console.error('Error fetching posts:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
-});
-
+});    // working
 app.post("/follow",async(req,res)=>{
 try {
   const {followerId,followingId} = req.body
@@ -375,7 +366,7 @@ try {
   return res.status(404).json(error)
 }
   
-})
+})    // Working
 app.get("/profile/:username", async (req, res) => {
   try {
     const username = req.params.username;
@@ -416,7 +407,7 @@ const countLike = await Like.countDocuments({author: user._id});
     console.error("Error fetching user posts:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
-});
+});   // Working
 app.post('/:post_id/comment', verifyJWT, async (req, res) => {
   try {
     // Find the authenticated user
@@ -449,7 +440,7 @@ app.post('/:post_id/comment', verifyJWT, async (req, res) => {
     console.log(error)
     res.status(400).json({ message: error.message });
   }
-});
+});     
 app.get('/likecount/:postId', async (req, res) => {
   try {
     const postId = req.params.postId;
@@ -526,8 +517,6 @@ app.post('/:postId/unlike', verifyJWT, async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 });
-
-
 app.get('/users',  async(req,res)=>{
 
 const user_list = await User.aggregate([
@@ -542,7 +531,6 @@ const user_list = await User.aggregate([
 res.status(201).json({user_list})
 })
 
- module.exports = app;
 
 
 
