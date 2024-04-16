@@ -246,7 +246,7 @@ app.post("/uploadPost", upload.single('image'), verifyJWT, async (req, res) => {
     console.error('Error uploading post:', error);
     return res.status(500).json({ error: 'Internal server error',error });
   }
-});c
+});
 app.delete('/posts/:postId', verifyJWT, async (req, res) => {
   const postId = req.params.postId;
   try {
