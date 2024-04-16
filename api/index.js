@@ -51,31 +51,15 @@ connectDB()
     console.log(error)
 })
 
-
+// T
 
 app.get("/",(req,res)=>{
 res.json({status:"Working"})
 
 })
-
-
 app.get("/hello",(req,res)=>{
     res.json({status:"Hello"})
     
-    })
-
-app.get('/api/users',  async(req,res)=>{
-
-    const user_list = await User.aggregate([
-      {$project:{
-        _id:1,
-        username:1,
-        avatar:1,
-        createdAt:1,
-        status:1
-      }}
-    ]);
-    res.status(201).json({user_list})
     })
 
 
@@ -234,41 +218,35 @@ app.post("/uploadPost", upload.single('image'), verifyJWT, async (req, res) => {
     // Find the authenticated user
     const user = await User.findById(req.user._id);
     
-    // Get the user's avatar
-    const userAvatar = user.avatar;
-    
-    let imageURL = null;
-
-    // Check if a file was uploaded
-    console.log(req.file)
-    if (req.file) {
-      // If a file was uploaded, upload it to Cloudinary
-      const cloudinaryResult = await uploadCloudinary(req.file.path);
-      imageURL = cloudinaryResult.url;
-    }
-  
-    // Create a new post with the uploader, caption, and image URL
-    const newPost = new Post({
-      uploader: req.user._id, // User ID of the authenticated user
-      caption: req.body.caption,
-      imageURL: imageURL?imageURL:null
-    });
-    // Save the post to the database
-    await newPost.save();
-    // Return a success response with the new post and the user's avatar
-    return res.status(201).json({ 
-      message: 'Post uploaded successfully', 
-      newPost, 
-      post: {
-        imageURL,
-        userAvatar
-      } 
-    });
+ if(user){
+  const userAvatar = user.avatar;
+      
+  // Create a new post with the uploader, caption, and image URL
+  const newPost = new Post({
+    uploader: req.user._id, // User ID of the authenticated user
+    caption: req.body.caption,
+    imageURL: req.body.imageURL
+  });
+  // Save the post to the database
+  await newPost.save();
+  // Return a success response with the new post and the user's avatar
+  return res.status(201).json({ 
+    message: 'Post uploaded successfully', 
+    newPost, 
+    post: {
+      imageURL,
+      userAvatar
+    } 
+  });
+ }
+   else{
+    return res.status(404).json({Error:"User didnt meet"})
+   }
   } catch (error) {
     console.error('Error uploading post:', error);
     return res.status(500).json({ error: 'Internal server error',error });
   }
-});
+});c
 app.delete('/posts/:postId', verifyJWT, async (req, res) => {
   const postId = req.params.postId;
   try {
@@ -302,7 +280,7 @@ app.delete('/posts/:postId', verifyJWT, async (req, res) => {
     console.error('Error deleting post:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
-});    
+});      // Working
 app.get('/posts', async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1; // Get the page number from query parameters, default to 1
@@ -440,7 +418,7 @@ app.post('/:post_id/comment', verifyJWT, async (req, res) => {
     console.log(error)
     res.status(400).json({ message: error.message });
   }
-});     
+});     // Working
 app.get('/likecount/:postId', async (req, res) => {
   try {
     const postId = req.params.postId;
@@ -475,7 +453,7 @@ app.get('/likecount/:postId', async (req, res) => {
     console.error(err);
     res.status(500).json({ message: 'Server Error' });
   }
-});
+});    // Working
 app.post('/:postId/like', verifyJWT, async (req, res) => {
   try {
     // Check if the user has already liked the post
@@ -500,7 +478,7 @@ app.post('/:postId/like', verifyJWT, async (req, res) => {
     console.error(err);
     res.status(500).json({ message: 'Server Error' });
   }
-});
+});    // Working
 app.post('/:postId/unlike', verifyJWT, async (req, res) => {
   try {
     // Check if the user has liked the post before
@@ -516,7 +494,7 @@ app.post('/:postId/unlike', verifyJWT, async (req, res) => {
     console.error(err);
     res.status(500).json({ message: 'Server Error' });
   }
-});
+});    // Working
 app.get('/users',  async(req,res)=>{
 
 const user_list = await User.aggregate([
@@ -529,7 +507,7 @@ const user_list = await User.aggregate([
   }}
 ]);
 res.status(201).json({user_list})
-})
+})    // Working
 
 
 
